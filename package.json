@@ -1,0 +1,19 @@
+{
+  "name": "chatapp-node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alunsto/chatapp.git"
+  },
+  "author": "Alun Stokes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alunsto/chatapp/issues"
+  },
+  "homepage": "https://github.com/Alunsto/chatapp#readme"
+}
