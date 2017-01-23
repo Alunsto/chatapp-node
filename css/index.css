@@ -1,5 +1,6 @@
 body {
   font-family: 'Raleway', sans-serif;
+  background-color: #111;
 }
 
 ::-webkit-scrollbar {
@@ -20,6 +21,11 @@ body {
   width: 100%;
   position: fixed;
   bottom: 0;
+}
+
+#input_text {
+  height: 6vh;
+  font-size: 44px;
 }
 
 .online-users {
