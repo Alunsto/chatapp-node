@@ -23,9 +23,16 @@ body {
   bottom: 0;
 }
 
+#online-users-area  {
+  position: fixed;
+  bottom: 1vh;
+  left: 2vw;
+  z-index: 1000;
+}
+
 #input_text {
   height: 6vh;
-  font-size: 44px;
+  font-size: 34px;
 }
 
 .online-users {
@@ -43,6 +50,12 @@ body {
   color: #B0D9E8;
   text-align: right;
   margin-right: 2vw;
+}
+
+.middle {
+  color: #777;
+  font-size: 28px;
+  text-align: center;
 }
 
 h1,
@@ -66,10 +79,9 @@ i {
 
 #type-something {
   text-align:center;
-  top:45vh;
   color: #aaa;
   transition: 0.7s;
-  margin-top: 2px;
+  margin-top: 3vh;
 }
 
 .message-text {
@@ -469,4 +481,37 @@ input[type="text"]:focus {
 .bounceInUp {
   -webkit-animation-name: bounceInUp;
   animation-name: bounceInUp;
+}
+
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
 }

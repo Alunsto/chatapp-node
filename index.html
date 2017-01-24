@@ -28,7 +28,7 @@
   <div class="text-box">
     <ul class="input-list underline clearfix">
       <li>
-        <input type="text" placeholder="username" id="input_text">
+        <input type="text" placeholder="username" id="input_text" autofocus>
       </li>
     </ul>
   </div>
@@ -39,79 +39,57 @@
 
   var has_name = false;
   var user_name = "";
-  var user_id = hash();
-  $("#input_text").keyup(function (e) {
-    if (e.which == 13 && $(this).val() != "") {
-      if (!has_name) {
-        if ($(this).val() != "") {
-          user_name = $(this).val();
-          has_name = true;
-          $("#type-something").text("Send a message");
-          $("#input_text").attr("placeholder", "message");
-          $(this).val("");
-        }
-      }
-      else {
-        if ($("#type-something").length) {
-          $("#type-something").css("opacity", 0);
-        }
-        sendMessage();
-        if (last_sender == user_id) {
-          writeText(user_name, $(this).val(), "right", true);
-        }
-        else {
-          writeText(user_name+" (Me)", $(this).val(), "right", false);
-        }
-        last_sender = user_id;
-        $(this).val("");
-      }
-    }
-  });
+  var user_id;
 
-  var last_sender;
 
-  $(document).ready(function() {
-    /*
-    writeText("computer", "are you ready?", "left");
-    setTimeout(function() {
-      var options = {
-        "id": "ready",
-        "question": "are you ready?",
-        "option_one_text": "yes",
-        "option_one_value": 1,
-        "option_one_response": "good then",
-        "option_two_text": "no",
-        "option_two_value": 0,
-        "option_two_response": "too bad",
-        "general_response": "Let's begin",
-        "time_until_general": 1500
-      }
-      writeOption(options);
-    },700);
-    */
-  });
+  var last_sender = "";
 
   function writeText(name, text, justification, repeat) {
-    justification_capital = justification.capitalizeFirstLetter();
-    if (repeat) {
-    var to_write = `
-    <div class="row">
-    <div class="col-md-12">
-    <h1 class="animated bounceIn`+justification_capital+` `+justification+` message-text">`+text+`</h1>
-    </div>
-    </div>
-    `;
+    if (justification != "middle") {
+      justification_capital = justification.capitalizeFirstLetter();
+      if (repeat) {
+        var to_write = `
+        <div class="row">
+        <div class="col-md-12">
+        <h1 class="animated bounceIn`+justification_capital+` `+justification+` message-text">`+text+`</h1>
+        </div>
+        </div>
+        `;
+      }
+      else {
+        var to_write = `
+        <div class="row">
+        <div class="col-md-12">
+        <!-- <hr width="5%" align="left" style="margin-left:2vw;"> -->
+        <i><h4 class="animated bounceIn`+justification_capital+` `+justification+` name-text">`+name+`</h4></i>
+        <h1 class="animated bounceIn`+justification_capital+` `+justification+` message-text">`+text+`</h1>
+        </div>
+        </div>
+        `;
+      }
     }
     else {
-    var to_write = `
-    <div class="row">
-    <div class="col-md-12">
-    <!-- <hr width="5%" align="left" style="margin-left:2vw;"> -->
-    <i><h4 class="animated bounceIn`+justification_capital+` `+justification+` name-text">`+name+`</h4></i>
-    <h1 class="animated bounceIn`+justification_capital+` `+justification+` message-text">`+text+`</h1>
-    </div>
-    </div>
-    `;
+      if (repeat) {
+        var to_write = `
+        <div class="row">
+        <div class="col-md-12">
+        <!-- <hr width="5%" align="left" style="margin-left:2vw;"> -->
+        <h1 class="animated fadeInUp `+justification+` message-text">`+text+`</h1>
+        </div>
+        </div>
+        `;
+      }
+      else {
+        var to_write = `
+        <div class="row">
+        <div class="col-md-12">
+        <!-- <hr width="5%" align="left" style="margin-left:2vw;"> -->
+        <i><h4 class="animated fadeInUp `+justification+` name-text">`+name+`</h4></i>
+        <h1 class="animated fadeInUp `+justification+` message-text">`+text+`</h1>
+        </div>
+        </div>
+        `;
+      }
     }
     $(".wrapper").append(to_write);
     toBottom("message_area");
@@ -142,9 +120,9 @@
     $("#input_text").prop("disabled", true);
   }
   function respond(text) {
-      setTimeout(function() {
-        writeText("computer", text, "left");
-      }, 600);
+    setTimeout(function() {
+      writeText("computer", text, "left");
+    }, 600);
   }
 
   $(document).on("click", "button", function() {
@@ -177,50 +155,59 @@
 
   function hash()
   {
-      var text = "";
-      var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      for( var i=0; i < 16; i++ )
-          text += possible.charAt(Math.floor(Math.random() * possible.length));
-      return text;
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < 16; i++ )
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
   }
+
 
   //Connected to server
   socket.on('connect', function(data) {
-    console.log('Connected to server ');
+    //console.log('Connected to server ');
+  });
+
+  socket.on('assign_user_id', function(data) {
+    user_id = data.user_id;
   });
 
   //Connection close
   socket.on('disconnect', function(data) {
-    console.log('Disconnected');
-  });
-
-  socket.on('welcome', function(data) {
-    console.log(data.message);
+    //console.log('Disconnected');
   });
 
   //Message Receved
   socket.on('user_message', function(data) {
-    console.log(data);
-      console.log(data.msgtype);
-      var sender_name = data.sender_name;
-      var message = data.message;
-      if (data.sender_id == last_sender) {
+    var sender_name = data.sender_name;
+    var message = data.message;
+    if (data.sender_id == last_sender) {
       writeText(sender_name, message, "left", true);
-      }
-      else {
+    }
+    else {
       writeText(sender_name, message, "left", false);
-      }
-        last_sender = data.sender_id;
+    }
+    last_sender = data.sender_id;
+  });
+
+  socket.on('add_user', function(data) {
+    writeText("system", data.new_user+" has joined", "middle", true);
+    updateNumUsers(data.current_users);
+  });
+
+  socket.on('remove_user', function(data) {
+    writeText("system", data.disconnected_user+" has left", "middle", true);
+    updateNumUsers(data.current_users);
+    //console.log(data.disconnected_user);
+  });
+
+  socket.on('remove_anon', function(data) {
+    updateNumUsers(data.current_users);
   });
 
   socket.on('current_users', function(data) {
     var num_users = data.current_users;
-    online_users_symbols = ""
-    for (var i = 0 ; i < num_users; i++) {
-      online_users_symbols += `<i class="fa fa-circle-o" aria-hidden="true"></i>`;
-    }
-    $("#online-users-area").html(online_users_symbols);
-    console.log(num_users+" connected");
+    updateNumUsers(num_users);
   });
 
   //Error
@@ -232,15 +219,50 @@
     var message = $("#input_text").val();
     if (message != "") {
       var websocket_data = {
-        sender_name: user_name,
-        sender_id: user_id,
         message: message,
       };
-
       socket.emit('sendMessage', websocket_data);
+      last_sender = user_id;
       $(this).val("");
     }
   }
+
+  function updateNumUsers(num_users) {
+    online_users_symbols = ""
+    for (var i = 0 ; i < num_users; i++) {
+      online_users_symbols += `<i class="fa fa-circle-o" aria-hidden="true"></i>`;
+    }
+    $("#online-users-area").html(online_users_symbols);
+    console.log(num_users+" connected");
+  }
+
+  $("#input_text").keyup(function (e) {
+    if (e.which == 13 && $(this).val() != "") {
+      if (!has_name) {
+        if ($(this).val() != "") {
+          user_name = $(this).val();
+          has_name = true;
+          $("#type-something").text("Send a message");
+          $("#input_text").attr("placeholder", "message");
+          $(this).val("");
+          socket.emit('connect_user', {user_name: user_name});
+        }
+      }
+      else {
+        if ($("#type-something").length) {
+          $("#type-something").css("opacity", 0);
+        }
+        if (last_sender == user_id) {
+          writeText(user_name, $(this).val(), "right", true);
+        }
+        else {
+          writeText(user_name+" (Me)", $(this).val(), "right", false);
+        }
+        sendMessage();
+        $(this).val("");
+      }
+    }
+  });
 
 
   </script>
