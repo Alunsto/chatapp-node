@@ -191,12 +191,12 @@
   });
 
   socket.on('add_user', function(data) {
-    writeText("system", data.new_user+" has joined", "middle", true);
+    writeText("system", "<b>" + data.new_user+"</b> has joined", "middle", true);
     updateNumUsers(data.current_users);
   });
 
   socket.on('remove_user', function(data) {
-    writeText("system", data.disconnected_user+" has left", "middle", true);
+    writeText("system", "<b>" + data.disconnected_user+"</b> has left", "middle", true);
     updateNumUsers(data.current_users);
     //console.log(data.disconnected_user);
   });
