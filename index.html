@@ -223,7 +223,6 @@
       };
       socket.emit('sendMessage', websocket_data);
       last_sender = user_id;
-      $(this).val("");
     }
   }
 
@@ -237,14 +236,16 @@
   }
 
   $("#input_text").keyup(function (e) {
-    if (e.which == 13 && $(this).val() != "") {
+    var text_box = $(this);
+    var text = text_box.val();
+    if (e.which == 13 && text != "") {
       if (!has_name) {
-        if ($(this).val() != "") {
-          user_name = $(this).val();
+        if (text != "") {
+          user_name = text;
           has_name = true;
           $("#type-something").text("Send a message");
           $("#input_text").attr("placeholder", "message");
-          $(this).val("");
+          text_box.val("");
           socket.emit('connect_user', {user_name: user_name});
         }
       }
@@ -253,13 +254,13 @@
           $("#type-something").css("opacity", 0);
         }
         if (last_sender == user_id) {
-          writeText(user_name, $(this).val(), "right", true);
+          writeText(user_name, text, "right", true);
         }
         else {
-          writeText(user_name+" (Me)", $(this).val(), "right", false);
+          writeText(user_name+" (Me)", text, "right", false);
         }
         sendMessage();
-        $(this).val("");
+        text_box.val("");
       }
     }
   });
