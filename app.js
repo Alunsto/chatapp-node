@@ -1,11 +1,13 @@
+var config = require("./config");
+
 var express = require('express');
 var mysql = require('mysql');
 var pool = mysql.createPool({
   connectionLimit: 1000,
-  host: '104.154.237.176',
-  user: 'root',
-  password: 'V3rbal1rony',
-  database: 'chatapp'
+  host: config.database.host,
+  user: config.database.user,
+  password: config.database.password,
+  database: config.database.database
 });
 var app = express();
 var http = require('http').Server(app);
@@ -52,6 +54,10 @@ io.on('connection', function(socket){
     io.sockets.emit('add_user', {current_users: current_users, new_user: data.user_name});
 
     pool.getConnection(function(err, connection) {
+      if (err) {
+        console.log(err);
+        return;
+      }
       connection.query("INSERT INTO users (username, user_id) VALUES (?,?)", [clients[sender_id], sender_id], function(err, rows, fields) {
 
       });
@@ -64,6 +70,10 @@ io.on('connection', function(socket){
     socket.broadcast.emit('user_message', {sender_name: clients[sender_id], sender_id: sender_id, message: data.message});
 
     pool.getConnection(function(err, connection) {
+      if (err) {
+        console.log(err);
+        return;
+      }
       connection.query("INSERT INTO messages (message, time_sent, sent_by) VALUES (?,NOW(),?)", [data.message, sender_id], function(err, rows, fields) {
 
       });
